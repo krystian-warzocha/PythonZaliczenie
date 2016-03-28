@@ -1,0 +1,36 @@
+<h1>{{stockindex.symbol}} - {{stockindex.name}}</h1>
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+{% if stockindex.equity_set.count > 0 %}
+    <form action="{% url 'stockindex:modify' stockindex.id %}" method="POST">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <th>Symbol</th>
+                <th>Price</th>
+                <th>Number</th>
+            </tr>
+            {% for equity in stockindex.equity_set.all %}
+                <tr>
+                    <td>{{equity.symbol}}</td>
+                    <td>{{equity.price}}</td>
+                    <td>{{equity.number}}</td>
+                    <td><input type="radio" name="equity" id="{{equity.id}}" value="{{equity.id}}"/></td>
+                </tr>
+            {% endfor %}
+        </table>
+        <input type="submit" name="update" value="Update"/>
+        <input type="submit" name="delete" value="Delete"/>
+    </form>
+{% else %}
+    <p>There are no equities in index {{stockindex.symbol}} </p>
+{% endif %}
+
+<h2>Adding/Updating equity to {{ stockindex.symbol }}</h2>
+<form action="{% url 'stockindex:add' stockindex.id %}" method="post">
+    {% csrf_token %}
+    Symbol: <input type="text" name="symbol" value="{{stock.symbol}}"/><br/>
+    Price: <input type="number" name="price" step="0.01" min="0" value="{{stock.price}}"/><br/>
+    Number: <input type="number" name="number" step="1" min="0" value="{{stock.number}}"/><br/>
+    <input type="submit" value="Add/Update" />
+</form>
+

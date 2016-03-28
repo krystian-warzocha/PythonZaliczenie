@@ -1,0 +1,31 @@
+<h1>List of stock indexes:</h1>
+{% if stockindex_list %}
+    <form action="{% url 'stockindex:deleteindex' %}" method="POST">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <th>Symbol</th>
+                <th>Name</th>
+                <th><input type="submit" name="delete" value="Delete"/></th>
+            </tr>
+            {% for stockindex in stockindex_list %}
+                <tr>
+                    <td><a href="{% url 'stockindex:detail' stockindex.id %}">{{stockindex.symbol}}</a></td>
+                    <td><a href="{% url 'stockindex:detail' stockindex.id %}">{{stockindex.symbol}}</a></td>
+                    <td><input type="radio" name="stockindex" id="{{stockindex.id}}" value="{{stockindex.id}}"/></td>
+                </tr>
+            {% endfor %}
+        </table>
+    </form>
+{% else %}
+    <p>No stock indexes are available.</p>
+{% endif %}
+
+<h2>Add new stock index</h2>
+<form action="{% url 'stockindex:addindex' %}" method="post">
+    {% csrf_token %}
+    Symbol: <input type="text" name="symbol"/><br/>
+    Name: <input type="text" name="name"/> <br/>
+    <input type="submit" value="Add Stock Index" />
+</form>
+
